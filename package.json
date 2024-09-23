@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "SoftUni - JS Back-End - Workshop",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "start": "nodemon src/app.js"
   },
