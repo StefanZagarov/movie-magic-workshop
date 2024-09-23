@@ -1,6 +1,7 @@
 import express from "express";
 import handlebars from "express-handlebars";
-import homeController from "./controller/homeController.js";
+// Import the routes.js for the modular routes
+import routes from "./routes.js";
 
 const port = 5000;
 
@@ -33,8 +34,8 @@ app.use(express.static(`public`));
 // });
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-// Attach the modular router
-app.use(homeController);
+//Start the routes
+app.use(routes);
 
 // Add a listener
 app.listen(port, () => console.log(`Server is listening on http://localhost:5000...`));
