@@ -15,11 +15,19 @@ app.engine(`hbs`, handlebars.engine({
 app.set(`view engine`, `hbs`);
 // Set the server to search for the views in the correct path
 app.set(`views`, `./src/views`);
+// Set the static route - must be at the top of all `app.get/set/etc` requests
+app.use(express.static(`public`));
 
 // Add the default route
+// app.get(`/`, (req, res) =>
+// {
+//     res.render(`index`);
+// });
+
+// Add the new default route, after we have created the default home HTML
 app.get(`/`, (req, res) =>
 {
-    res.render(`index`);
+    res.render(`home`);
 });
 
 // Add a listener
