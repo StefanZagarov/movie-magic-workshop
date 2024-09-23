@@ -1,5 +1,6 @@
 import express from "express";
 import handlebars from "express-handlebars";
+import homeController from "./controller/homeController.js";
 
 const port = 5000;
 
@@ -24,11 +25,16 @@ app.use(express.static(`public`));
 //     res.render(`index`);
 // });
 
-// Add the new default route, after we have created the default home HTML
-app.get(`/`, (req, res) =>
-{
-    res.render(`home`);
-});
+//////////////////////////////////// This goes in the controller folder as a modular router ////////////////////////////////////
+// // Add the new default route, after we have created the default home HTML
+// app.get(`/`, (req, res) =>
+// {
+//     res.render(`home`);
+// });
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// Attach the modular router
+app.use(homeController);
 
 // Add a listener
 app.listen(port, () => console.log(`Server is listening on http://localhost:5000...`));
