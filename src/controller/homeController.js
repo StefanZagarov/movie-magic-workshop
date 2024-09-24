@@ -11,9 +11,13 @@ import movieServices from "../services/movieServices.js";
 const router = Router();
 
 // Attach an endpoint
-router.get(`/`, (req, res) =>
+router.get(`/`, async (req, res) =>
 {
-    const movies = movieServices.getAll();
+    // Get the movies from the DB
+    const movies = await movieServices.getAll();
+
+    // The path we give will be searched in `views`. If we don't specify a file, it will search for the `index` by default settings
+    // Send the tempalte (partial called `movies`) to the `home>index.hbs` file
     res.render(`home`, { movies });
 });
 
