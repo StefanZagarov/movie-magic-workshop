@@ -1,3 +1,19 @@
+{{!-- Since the search html is the same page as the home page, but with just added search bar, we can place it
+here and add a condition when to display it --}}
+{{#if isSearch}}
+<section id="search"></section>
+<h1>Search</h1>
+{{!-- Action is redundant as the default is `/movies/search` anyway, but we keep it for demonstration --}}
+{{!-- We use the GET request because we will get the data from the URL address --}}
+<form action="/movies/search" method="GET" class="form">
+    <input type="text" class="search" name="title" placeholder="Title...">
+    <input type="text" name="genre" class="genre" placeholder="Genre...">
+    <input type="number" name="year" class="year" placeholder="Year...">
+    <input type="submit" value="search">
+</form>
+</section>
+{{/if}}
+
 <section id="catalog">
     <h1>All Movies</h1>
     <div class="band">
