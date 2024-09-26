@@ -22,5 +22,11 @@ router.use(`/movies`, createMovieController);
 // This allows us to strip the `/movies` part from the controller
 // In case of one address line only (/create for example), if we add the path here, then the controller will hold only `/`
 
+// 404 for all addresses without routes
+router.all(`*`, (req, res) =>
+{
+    res.render(`404`);
+});
+
 // Export the router to be used in app.js
 export default router;
