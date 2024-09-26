@@ -27,10 +27,5 @@ router.get(`/about`, (req, res) =>
     res.render(`home/about`);
 });
 
-router.get(`/test`, (req, res) =>
-{
-    res.redirect(`/`);
-});
-
 // Finally, export it
 export default router;
