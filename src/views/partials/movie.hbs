@@ -6,5 +6,7 @@
         <h1>{{title}}</h1>
         <h2>Genre: {{genre}}</h2>
         <p>Description: {{description}}</p>
-        <a href="#" class="details">Details</a>
+        {{!-- To access the specific movie's page, we need an identifier for that movie, so we gave each movie an id,
+        which we will access through the URL address with id of the movie --}}
+        <a href="/movies/{{id}}/details" class="details">Details</a>
     </div>

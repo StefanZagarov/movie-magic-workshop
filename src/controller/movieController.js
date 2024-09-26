@@ -1,4 +1,5 @@
 // Each function should have its own controller. Creating movies is not part of the home controller by logic
+// This controller does everything related to the movies - creation, viewing details, etc
 
 import { Router } from "express";
 import movieService from "../services/movieService.js";
@@ -26,6 +27,18 @@ router.post(`/create`, (req, res) =>
 
     // Unable to load the css (ns error connection refused), even on lecturer's code, the problem comes from the browser most likely OR the static path is incorrect for the redirect
     res.redirect(`/`);
+});
+
+router.get(`/:movieId/details`, async (req, res) =>
+{
+    // Get the id from the url
+    const movieId = req.params.movieId;
+
+    // Get the movie
+    const movie = await movieService.getOne(movieId);
+
+    // Send the movie to the template
+    res.render(`movies/details`, { movie });
 });
 
 export default router;

@@ -5,7 +5,7 @@
 import { Router } from "express";
 
 import homeController from "./controller/homeController.js";
-import createMovieController from "./controller/createMovieController.js";
+import createMovieController from "./controller/movieController.js";
 
 // Create instance of the modular router
 const router = Router();
