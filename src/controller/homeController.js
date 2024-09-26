@@ -6,7 +6,7 @@
 
 // Alternative import of router
 import { Router } from "express";
-import movieServices from "../services/movieServices.js";
+import movieServices from "../services/movieService.js";
 
 const router = Router();
 
@@ -25,6 +25,11 @@ router.get(`/`, async (req, res) =>
 router.get(`/about`, (req, res) =>
 {
     res.render(`home/about`);
+});
+
+router.get(`/test`, (req, res) =>
+{
+    res.redirect(`/`);
 });
 
 // Finally, export it

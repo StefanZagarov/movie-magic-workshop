@@ -1,4 +1,4 @@
-// A file that contains the route definitions for your web server.
+// A file that contains the route definitions for our web server
 // Routes in Express define how the server responds to client requests(GET, POST, PUT, DELETE, etc.) at different endpoints(URLs)
 // The routes.js file is used to separate and organize routes, making the code more modular and easier to maintain
 

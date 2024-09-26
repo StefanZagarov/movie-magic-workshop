@@ -17,8 +17,10 @@ app.engine(`hbs`, handlebars.engine({
 app.set(`view engine`, `hbs`);
 // Set the server to search for the views in the correct path
 app.set(`views`, `./src/views`);
-// Set the static route - must be at the top of all `app.get/set/etc` requests
+// Set the static route - must be at the top of all `app.get/set/etc` requests (__dirpath doesn't work with modules, only with CommonJS)
 app.use(express.static(`public`));
+// In order to get the data from the `create.hbs` form, we need to be able to use req.body property. For that we need the `urlencoded` middleware (body-parser is deprecated so we need to add the option {extended: false})
+app.use(express.urlencoded({ extended: false }));
 
 // Add the default route
 // app.get(`/`, (req, res) =>
