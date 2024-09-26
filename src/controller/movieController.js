@@ -70,8 +70,9 @@ router.get(`/search`, async (req, res) =>
     const filter = req.query;
 
     const movies = await movieService.getAll(filter);
-    console.log(movies);
-    res.render(`home`, { isSearch: true, movies });
+    // In order to keep the text in the search fields after we have submitted the form, we also give the filter object to the template
+    console.log(filter);
+    res.render(`home`, { isSearch: true, movies, filter });
 });
 
 export default router;
