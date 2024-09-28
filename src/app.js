@@ -1,40 +1,27 @@
+// The main file from which the whole program starts
+
 import express from "express";
-import handlebars from "express-handlebars";
 // Import the routes.js for the modular routes
 import routes from "./routes.js";
+
+// Import the configuration of the express
+import expressInit from "./config/expressInit.js";
+// Import the configuration of the view engine
+import handlebarsInit from "./config/handlebarsInit.js";
+// Import the connection to the database
+import mongooseInit from "./config/mongooseInit.js";
 
 const port = 5000;
 
 // Get the server
 const app = express();
 
-// Setup the engine
-app.engine(`hbs`, handlebars.engine({
-    extname: `hbs`,
-}));
-
-// Set default engine
-app.set(`view engine`, `hbs`);
-// Set the server to search for the views in the correct path
-app.set(`views`, `./src/views`);
-// Set the static route - must be at the top of all `app.get/set/etc` requests (__dirpath doesn't work with modules, only with CommonJS)
-app.use(express.static(`public`));
-// In order to get the data from the `create.hbs` form, we need to be able to use req.body property. For that we need the `urlencoded` middleware (body-parser is deprecated so we need to add the option {extended: false})
-app.use(express.urlencoded({ extended: false }));
-
-// Add the default route
-// app.get(`/`, (req, res) =>
-// {
-//     res.render(`index`);
-// });
-
-//////////////////////////////////// This goes in the controller folder as a modular router ////////////////////////////////////
-// // Add the new default route, after we have created the default home HTML
-// app.get(`/`, (req, res) =>
-// {
-//     res.render(`home`);
-// });
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Initialise the express configuraion
+expressInit(app);
+// Initialise the config of the view engine
+handlebarsInit(app);
+// We can either first connect to the DB and then start the app, or start the app and then connect the the DB. It doesn't matter either way, because those are two separate actions
+mongooseInit();
 
 //Start the routes
 app.use(routes);
