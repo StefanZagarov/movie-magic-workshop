@@ -1,18 +1,19 @@
 {{!-- Since the search html is the same page as the home page, but with just added search bar, we can place it
 here and add a condition when to display it --}}
 {{#if isSearch}}
-<section id="search"></section>
-<h1>Search</h1>
-{{!-- Action is redundant as the default is `/movies/search` anyway, but we keep it for demonstration --}}
-{{!-- We use the GET request because we will get the data from the URL address --}}
-{{!-- The purpose of the value attribute is to keep the search input in the fields after the submit, so the client knows
-what criteria he has searched with --}}
-<form action="/movies/search" method="GET" class="form">
-    <input type="text" class="search" name="title" value="{{filter.title}}" placeholder="Title...">
-    <input type="text" name="genre" class="genre" value="{{filter.genre}}" placeholder="Genre...">
-    <input type="number" name="year" class="year" value="{{filter.year}}" placeholder="Year...">
-    <input type="submit" value="search">
-</form>
+<section id="search">
+    <h1>Search</h1>
+    {{!-- Action is redundant as the default is `/movies/search` anyway, but we keep it for demonstration --}}
+    {{!-- We use the GET request because we will get the data from the URL address --}}
+    {{!-- The purpose of the value attribute is to keep the search input in the fields after the submit, so the client
+    knows
+    what criteria he has searched with --}}
+    <form action="/movies/search" method="GET" class="form">
+        <input type="text" class="search" name="title" value="{{filter.title}}" placeholder="Title...">
+        <input type="text" name="genre" class="genre" value="{{filter.genre}}" placeholder="Genre...">
+        <input type="number" name="year" class="year" value="{{filter.year}}" placeholder="Year...">
+        <input type="submit" value="search">
+    </form>
 </section>
 {{/if}}
 
