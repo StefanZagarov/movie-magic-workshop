@@ -29,8 +29,9 @@ const getAll = async (filter = {}) =>
 // Mongoose will create the unique ID by itself and will convert the rating from string to a number
 const create = (newMovie) => Movie.create(newMovie);
 
-// Not the most optimal way to get a movie, but for this demo it will do
-const getOne = (movieId) => Movie.findById(movieId);
+// .lean() is a method of Query, if those are Documents, then we won't be able to call .lean()
+// .lean() converts Documents to clean objects
+const getOne = (movieId) => Movie.findById(movieId).lean();
 
 // This is called `Anonymus export`
 export default { getAll, getOne, create };

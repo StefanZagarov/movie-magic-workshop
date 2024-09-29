@@ -6,6 +6,11 @@ import movieService from "../services/movieService.js";
 
 const router = Router();
 
+function toArray(documents)
+{
+    return documents.map(document => document.toObject());
+}
+
 // We add /movies to the /create address because in the future we may have a creation for other things aswell. In the `main` layout we need to change the path aswell to /movies/create
 // Full URL address: /movies/create
 router.get(`/create`, (req, res) =>
@@ -69,10 +74,10 @@ router.get(`/search`, async (req, res) =>
     // We want to filter movies based on the query
     const filter = req.query;
 
-    const movies = await movieService.getAll(filter);
+    const movies = await movieService.getAll(filter); // Convert to clean objects
 
     // In order to keep the text in the search fields after we have submitted the form, we also give the filter object to the template
-    res.render(`home`, { isSearch: true, movies, filter });
+    res.render(`home`, { isSearch: true, movies: toArray(movies), filter });
 });
 
 export default router;
