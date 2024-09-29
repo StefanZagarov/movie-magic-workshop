@@ -1,4 +1,4 @@
-import { Schema, model } from `mongoose`;
+import { Schema, model } from "mongoose";
 
 // Set up the schema
 const movieSchema = new Schema({

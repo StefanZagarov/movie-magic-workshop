@@ -10,15 +10,19 @@ import movieServices from "../services/movieService.js";
 
 const router = Router();
 
+function toArray(documents)
+{
+    return documents.map(document => document.toObject());
+}
+
 // Attach an endpoint
 router.get(`/`, async (req, res) =>
 {
     // Get the movies from the DB
     const movies = await movieServices.getAll();
 
-    // The path we give will be searched in `views`. If we don't specify a file, it will search for the `index` by default settings
-    // Send the tempalte (partial called `movies`) to the `home>index.hbs` file
-    res.render(`home`, { movies });
+    // Handlebars doesn't know what a Document is, so we fix it by sending clean data
+    res.render(`home`, { movies: toArray(movies) });
 });
 
 // The about page makes sense to be in the home controller because it is a static page
