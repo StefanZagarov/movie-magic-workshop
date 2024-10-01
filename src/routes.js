@@ -6,6 +6,7 @@ import { Router } from "express";
 
 import homeController from "./controller/homeController.js";
 import createMovieController from "./controller/movieController.js";
+import castController from "./controller/castController.js";
 
 // Create instance of the modular router
 const router = Router();
@@ -21,6 +22,8 @@ router.use(`/movies`, createMovieController);
 // router.get(`/movies/create`, (req, res) =>   becomes   router.get(`/create`, (req, res) =>
 // This allows us to strip the `/movies` part from the controller
 // In case of one address line only (/create for example), if we add the path here, then the controller will hold only `/`
+
+router.use(`/cast`, castController);
 
 // 404 for all addresses without routes
 router.all(`*`, (req, res) =>
