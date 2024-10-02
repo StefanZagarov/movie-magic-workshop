@@ -3,6 +3,7 @@
 
 import { Router } from "express";
 import movieService from "../services/movieService.js";
+import castService from "../services/castService.js";
 
 const router = Router();
 
@@ -41,11 +42,18 @@ router.get(`/:movieId/details`, async (req, res) =>
     const movieId = req.params.movieId;
 
     // Get the movie
-    const movie = await movieService.getOne(movieId);
+    // .lean() is a method of Query, if those are Documents, then we won't be able to call .lean()
+    // .lean() converts Documents to clean objects
+    const movie = await movieService.getOne(movieId).lean();
 
     // Prepare view data - view data is the way we show data (not proccess, but just present data)
     // We create a new property which will show the amount of stars according to the number movie.rating is holding
     movie.ratingView = getRatingViewData(movie.rating);
+
+
+    // We need to turn to a service which will make the connection - relation
+    // We can get the id of all the casts, and populate the data of each cast
+    console.log(movie.casts);
 
     // Send the movie to the template
     res.render(`movies/details`, { movie });
@@ -78,6 +86,27 @@ router.get(`/search`, async (req, res) =>
 
     // In order to keep the text in the search fields after we have submitted the form, we also give the filter object to the template
     res.render(`home`, { isSearch: true, movies: toArray(movies), filter });
+});
+
+// Adding the attach button functionality - alternative way to implement is by using "nested route"
+router.get(`/:movieId/attach`, async (req, res) =>
+{
+    const movie = await movieService.getOne(req.params.movieId).lean();
+    // Getting all casts to send to the attach.hbs
+    const casts = await castService.getAll().lean();
+
+    res.render(`cast/attach`, { movie, casts });
+});
+
+// Create an action for sending the data of attach cast
+router.post(`/:movieId/attach`, async (req, res) =>
+{
+    const movieId = req.params.movieId;
+    const castId = req.body.cast;
+
+    await movieService.attach(movieId, castId);
+
+    res.redirect(`/movies/${movieId}/details`);
 });
 
 export default router;

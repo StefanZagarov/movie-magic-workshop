@@ -29,9 +29,25 @@ const getAll = async (filter = {}) =>
 // Mongoose will create the unique ID by itself and will convert the rating from string to a number
 const create = (newMovie) => Movie.create(newMovie);
 
-// .lean() is a method of Query, if those are Documents, then we won't be able to call .lean()
-// .lean() converts Documents to clean objects
-const getOne = (movieId) => Movie.findById(movieId).lean();
+// .populate() is a model population - we get all the casts details (full model) via the stored IDs in the Movie model
+const getOne = (movieId) => Movie.findById(movieId).populate(`casts`);
+
+// Attach the cast to the movie - using relation
+const attach = (movieId, castId) =>
+{
+    // The bad way to attach
+    // 1. Get the movie id
+    // const movie = await Movie.findById(movieId);
+    // 2. Add the cast id to the movie's cast property
+    // movie.casts.push(castId);
+    // 3. Save the new document
+    // return movie.save();
+
+    // Better way to do it since it does the operation on database-level
+    // Push in the casts property the castId
+    // MUST BE AWAITED WHEN CALLED
+    return Movie.findByIdAndUpdate(movieId, { $push: { casts: castId } });
+};
 
 // This is called `Anonymus export`
-export default { getAll, getOne, create };
+export default { getAll, getOne, create, attach };

@@ -1,4 +1,4 @@
-import { Schema, model } from "mongoose";
+import { Schema, model, Types } from "mongoose";
 
 // Set up the schema
 const movieSchema = new Schema({
@@ -30,6 +30,15 @@ const movieSchema = new Schema({
         type: String,
         required: [true, `Image urk is required!`]
     },
+    // Creating relational data: many-to-many
+    // We create a casts property, which will hold an array, since we will have many-to-many relations
+    // In it we describe in {} block what the essence of the relation is
+    // ObjectId is a specific type coming from mongoose
+    // ref is the reference to the model we are going to refer (link) to
+    casts: [{
+        type: Types.ObjectId,
+        ref: `Cast`
+    }],
 });
 
 // Create the model - it makes automatic binding of singular and plural forms, this is how it will bing our Movie to `movies` collection

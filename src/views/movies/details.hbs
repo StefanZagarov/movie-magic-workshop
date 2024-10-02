@@ -20,11 +20,34 @@
                 </div>
 
                 <p class="disc">Description: {{movie.description}}</p>
+
+
+                <a href="/movies/{{movie._id}}/attach" class="details" style="display: inline-block;">Attach cast</a>
             </div>
+
         </div>
         <div class="card_right">
             <img src="{{movie.imageUrl}}" alt="{{movie.title}}">
         </div>
+    </div>
+
+    {{!-- We can make this a partial, but there is no point since partials are created only when the elemen/s will be
+    used on different page aswell --}}
+    <div class="main-cast-card">
+        {{!-- Instead we can just loop it here --}}
+        {{#each movie.casts}}
+        <div class="cast-card">
+            <div class="card-img">
+                <img src="{{imageUrl}}" alt="{{name}}">
+            </div>
+            <div class="cast-info">
+                <h1>{{name}}</h1>
+                <h3>Age: {{age}}</h3>
+                <h3>Born: {{born}}</h3>
+                <h3>Name in Movie: n/a</h3>
+            </div>
+        </div>
+        {{/each}}
     </div>
 
 </section>
