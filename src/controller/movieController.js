@@ -7,6 +7,7 @@ import castService from "../services/castService.js";
 
 const router = Router();
 
+// Deprecated (we don't use it anymore since we use .lean())
 function toArray(documents)
 {
     return documents.map(document => document.toObject());
@@ -46,29 +47,31 @@ router.get(`/:movieId/details`, async (req, res) =>
     // .lean() converts Documents to clean objects
     const movie = await movieService.getOne(movieId).lean();
 
+    // The rating has been removed for an express "helper" - check "handlebarsInit.js" > helper:
     // Prepare view data - view data is the way we show data (not proccess, but just present data)
     // We create a new property which will show the amount of stars according to the number movie.rating is holding
-    movie.ratingView = getRatingViewData(movie.rating);
+    // movie.ratingView = getRatingViewData(movie.rating);
 
 
     // We need to turn to a service which will make the connection - relation
     // We can get the id of all the casts, and populate the data of each cast
-    console.log(movie.casts);
 
     // Send the movie to the template
     res.render(`movies/details`, { movie });
 });
-// For the rating we create a star for the ammount of rating the movie has(if it has rating of 8 we show 8 stars)
-function getRatingViewData(rating)
-{
-    // Since we are not escaping the rating in details.hbs so they can be converted to symbol, it is important that we make a check if the rating is a number and there are no strings (so we can't be hacked, XSS attack)
-    if (!Number.isInteger(rating))
-    {
-        return `n/a`;
-    }
 
-    return `&#x2605;`.repeat(rating);
-}
+// The rating has been removed for an express "helper" - check "handlebarsInit.js" > helper:
+// For the rating we create a star for the ammount of rating the movie has(if it has rating of 8 we show 8 stars)
+// function getRatingViewData(rating)
+// {
+//     // Since we are not escaping the rating in details.hbs so they can be converted to symbol, it is important that we make a check if the rating is a number and there are no strings (so we can't be hacked, XSS attack)
+//     if (!Number.isInteger(rating))
+//     {
+//         return `n/a`;
+//     }
+
+//     return `&#x2605;`.repeat(rating);
+// }
 
 // Adding search functionality - we have a conditional statement in index.hbs for the search bar, where it displays the search bar if we give it a `true` boolean
 // For this goal, we will render the home page, but this time we give additional boolean `isSearch` to activate the search bar
@@ -79,21 +82,21 @@ router.get(`/search`, async (req, res) =>
     // When using a search, it is better to use a GET request so the values of the search bar remain at the URL as query strings. This way we can copy the address and send it to others, and they will see the same result
     // console.log(req.query);
 
-    // We want to filter movies based on the query
+    // We want to filter movies based on the query - get the input and filter to show only the movies matching the input
     const filter = req.query;
 
-    const movies = await movieService.getAll(filter); // Convert to clean objects
+    const movies = await movieService.getAll(filter).lean(); // Convert to clean objects
 
     // In order to keep the text in the search fields after we have submitted the form, we also give the filter object to the template
-    res.render(`home`, { isSearch: true, movies: toArray(movies), filter });
+    res.render(`home`, { isSearch: true, movies, filter });
 });
 
 // Adding the attach button functionality - alternative way to implement is by using "nested route"
 router.get(`/:movieId/attach`, async (req, res) =>
 {
     const movie = await movieService.getOne(req.params.movieId).lean();
-    // Getting all casts to send to the attach.hbs
-    const casts = await castService.getAll().lean();
+    // Getting all casts to send to the attach.hbs, we get all casts that are not already added
+    const casts = await castService.getAllWithout(movie.casts).lean();
 
     res.render(`cast/attach`, { movie, casts });
 });
@@ -103,8 +106,9 @@ router.post(`/:movieId/attach`, async (req, res) =>
 {
     const movieId = req.params.movieId;
     const castId = req.body.cast;
+    const character = req.body.character;
 
-    await movieService.attach(movieId, castId);
+    await movieService.attach(movieId, castId, character);
 
     res.redirect(`/movies/${movieId}/details`);
 });

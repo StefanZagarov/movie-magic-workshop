@@ -8,8 +8,12 @@ export default async function mongooseInit()
 {
     try
     {
+        // Try to connect to the Atlas, if the url doesn't exist, then try to connect to the url above
+        // const connection = process.env.DB_URL || dbUrl;
+
+        // We will keep the non-Atlas connection by default as it keeps our movies data
         await connect(dbUrl);
-        console.log(`Successfully connected to DB`);
+        console.log(`Successfully connected to DB ${dbUrl}`);
 
     } catch (error)
     {

@@ -4,6 +4,9 @@ import express from "express";
 // Import the routes.js for the modular routes
 import routes from "./routes.js";
 
+// Import dotenv
+import "dotenv/config";
+
 // Import the configuration of the express
 import expressInit from "./config/expressInit.js";
 // Import the configuration of the view engine

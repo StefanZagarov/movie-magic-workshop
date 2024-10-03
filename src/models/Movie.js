@@ -4,11 +4,12 @@ import { Schema, model, Types } from "mongoose";
 const movieSchema = new Schema({
     title: {
         type: String,
-        required: [true, `Title is required!`]
+        required: [true, `Title is required!`],
     },
     genre: {
         type: String,
-        required: [true, `Genre is required!`]
+        required: [true, `Genre is required!`],
+        lowercase: true
     },
     director: {
         type: String,
@@ -16,15 +17,20 @@ const movieSchema = new Schema({
     },
     year: {
         type: Number,
-        required: [true, `Year is required!`]
+        required: [true, `Year is required!`],
+        min: 1900,
+        max: 2050
     },
     rating: {
         type: Number,
-        required: [true, `Rating is required!`]
+        required: [true, `Rating is required!`],
+        min: 1,
+        max: 10
     },
     description: {
         type: String,
-        required: [true, `Description is required!`]
+        required: [true, `Description is required!`],
+        maxLength: 100
     },
     imageUrl: {
         type: String,
@@ -36,8 +42,12 @@ const movieSchema = new Schema({
     // ObjectId is a specific type coming from mongoose
     // ref is the reference to the model we are going to refer (link) to
     casts: [{
-        type: Types.ObjectId,
-        ref: `Cast`
+        _id: false,
+        character: String,
+        cast: {
+            type: Types.ObjectId,
+            ref: 'Cast'
+        },
     }],
 });
 
