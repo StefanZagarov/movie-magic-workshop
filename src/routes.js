@@ -7,6 +7,7 @@ import { Router } from "express";
 import homeController from "./controller/homeController.js";
 import createMovieController from "./controller/movieController.js";
 import castController from "./controller/castController.js";
+import authController from "./controller/authController.js";
 
 // Create instance of the modular router
 const router = Router();
@@ -24,6 +25,9 @@ router.use(`/movies`, createMovieController);
 // In case of one address line only (/create for example), if we add the path here, then the controller will hold only `/`
 
 router.use(`/cast`, castController);
+
+// Authentication routes handling
+router.use(`/auth`, authController);
 
 // 404 for all addresses without routes
 router.all(`*`, (req, res) =>
