@@ -40,6 +40,7 @@ export const authMiddleware = (req, res, next) =>
 
         // Attach the whole data to the requests so the actions can see it
         req.user = user;
+        req.isAuthenticated = true; // needed for isAuth
         // Attach parameters to the responses so the views can also see it
         res.locals.userId = user._id;
         res.locals.userEmail = user.email;
@@ -57,4 +58,16 @@ export const authMiddleware = (req, res, next) =>
         res.redirect(`/auth/login`);
     }
 
+};
+
+// Route guard - allows or denies access to specific routes, unline the other function above which just checks
+export const isAuth = function (req, res, next)
+{
+    // If not authenticated 
+    if (!req.isAuthenticated)
+    {
+        return res.redirect(`/auth/login`);
+    }
+
+    return next();
 };

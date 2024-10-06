@@ -4,6 +4,7 @@
 import { Router } from "express";
 import movieService from "../services/movieService.js";
 import castService from "../services/castService.js";
+import { isAuth } from "../middlewares/authMiddleware.js";
 
 const router = Router();
 
@@ -15,7 +16,7 @@ function toArray(documents)
 
 // We add /movies to the /create address because in the future we may have a creation for other things aswell. In the `main` layout we need to change the path aswell to /movies/create
 // Full URL address: /movies/create
-router.get(`/create`, (req, res) =>
+router.get(`/create`, isAuth, (req, res) =>
 {
     // The path we give will be searched in `views`
     res.render(`movies/create`);
@@ -60,7 +61,8 @@ router.get(`/:movieId/details`, async (req, res) =>
     // const isOwner = req.user?._id == movie.owner;
 
     // Fixing the two equals
-    const isOwner = req.user._id === movie.owner?.toString();
+    // Fixing a bug by adding movie.owner
+    const isOwner = movie.owner && movie.owner.toString() === req.user?._id;
 
     // If there is no user, it will return undefined, which will turn to false
     // We call this in the details tempalte because when we call the template, it will render inside the main layout, in the main layout we will have the access to the data given from here
@@ -105,7 +107,7 @@ router.get(`/search`, async (req, res) =>
 });
 
 // Adding the attach button functionality - alternative way to implement is by using "nested route"
-router.get(`/:movieId/attach`, async (req, res) =>
+router.get(`/:movieId/attach`, isAuth, async (req, res) =>
 {
     const movie = await movieService.getOne(req.params.movieId).lean();
     // Getting all casts to send to the attach.hbs, we get all casts that are not already added
@@ -115,7 +117,7 @@ router.get(`/:movieId/attach`, async (req, res) =>
 });
 
 // Create an action for sending the data of attach cast
-router.post(`/:movieId/attach`, async (req, res) =>
+router.post(`/:movieId/attach`, isAuth, async (req, res) =>
 {
     const movieId = req.params.movieId;
     const castId = req.body.cast;
@@ -127,7 +129,7 @@ router.post(`/:movieId/attach`, async (req, res) =>
 });
 
 // Delete the movie
-router.get(`/:movieId/delete`, async (req, res) =>
+router.get(`/:movieId/delete`, isAuth, async (req, res) =>
 {
     const movieId = req.params.movieId;
 
@@ -137,7 +139,7 @@ router.get(`/:movieId/delete`, async (req, res) =>
 });
 
 // Edit movie page
-router.get(`/:movieId/edit`, async (req, res) =>
+router.get(`/:movieId/edit`, isAuth, async (req, res) =>
 {
     const movieId = req.params.movieId;
 
@@ -148,7 +150,7 @@ router.get(`/:movieId/edit`, async (req, res) =>
 });
 
 // Update the information in the DB
-router.post(`/:movieId/edit`, async (req, res) =>
+router.post(`/:movieId/edit`, isAuth, async (req, res) =>
 {
     const movieData = req.body;
     const movieId = req.params.movieId;

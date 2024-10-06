@@ -8,6 +8,7 @@ import homeController from "./controllers/homeController.js";
 import createMovieController from "./controllers/movieController.js";
 import castController from "./controllers/castController.js";
 import authController from "./controllers/authController.js";
+import { isAuth } from "./middlewares/authMiddleware.js";
 
 // Create instance of the modular router
 const router = Router();
@@ -24,7 +25,7 @@ router.use(`/movies`, createMovieController);
 // This allows us to strip the `/movies` part from the controller
 // In case of one address line only (/create for example), if we add the path here, then the controller will hold only `/`
 
-router.use(`/cast`, castController);
+router.use(`/cast`, isAuth, castController);
 
 // Authentication routes handling
 router.use(`/auth`, authController);
