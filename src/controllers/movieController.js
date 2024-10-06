@@ -56,13 +56,17 @@ router.get(`/:movieId/details`, async (req, res) =>
     // movie.ratingView = getRatingViewData(movie.rating);
 
     // Check if the currently viewed movie is by the logged in user
-    const isOwner = req.user?._id;
+    // We use only two equals because the left is a string and the right is an object of ObjectId
+    // const isOwner = req.user?._id == movie.owner;
+
+    // Fixing the two equals
+    const isOwner = req.user._id === movie.owner?.toString();
 
     // We need to turn to a service which will make the connection - relation
     // We can get the id of all the casts, and populate the data of each cast
 
     // Send the movie to the template
-    res.render(`movies/details`, { movie });
+    res.render(`movies/details`, { movie, isOwner });
 });
 
 // The rating has been removed for an express "helper" - check "handlebarsInit.js" > helper:
