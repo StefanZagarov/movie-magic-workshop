@@ -49,6 +49,12 @@ const movieSchema = new Schema({
             ref: 'Cast'
         },
     }],
+
+    // Relation
+    owner: {
+        type: Types.ObjectId,
+        ref: "User"
+    }
 });
 
 // Create the model - it makes automatic binding of singular and plural forms, this is how it will bing our Movie to `movies` collection

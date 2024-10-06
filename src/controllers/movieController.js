@@ -29,8 +29,11 @@ router.post(`/create`, (req, res) =>
     // First we get the data from the request body
     const movieData = req.body;
 
+    // Add the user id to the movie's info so we can use it later to check if the movie is created by the logged in user
+    const ownerId = req.user._id;
+
     // Now we want to save the data to the data layer, however the controller can't directly access the data layer, so we have to use the service layer
-    movieService.create(movieData);
+    movieService.create(movieData, ownerId);
 
     // Unable to load the css (ns error connection refused), even on lecturer's code, the problem comes from the browser most likely OR the static path is incorrect for the redirect
     res.redirect(`/`);
@@ -52,6 +55,8 @@ router.get(`/:movieId/details`, async (req, res) =>
     // We create a new property which will show the amount of stars according to the number movie.rating is holding
     // movie.ratingView = getRatingViewData(movie.rating);
 
+    // Check if the currently viewed movie is by the logged in user
+    const isOwner = req.user?._id;
 
     // We need to turn to a service which will make the connection - relation
     // We can get the id of all the casts, and populate the data of each cast

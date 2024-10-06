@@ -25,6 +25,7 @@ export const authMiddleware = (req, res, next) =>
 
         // 3. Add the user data to the request - this data can then be accessed from the other modules, for example movieController, we can do `req.user.email` to check who is making this request
         // Since it uses the same instance of the `req` object, we can access the .user properties attached to the req object
+        // We will use this in move details to check if the movie is created by the same user (email)
 
         // THIS GIVES ERROR
         // req.user._id = decodedToken._id;

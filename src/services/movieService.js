@@ -48,7 +48,8 @@ const getAll = (filter = {}) =>
 
 // The controller wants to send the data to be saved at the data layer, so the task of the service is to accept the function of the controller and send it to the data layer
 // Mongoose will create the unique ID by itself and will convert the rating from string to a number
-const create = (newMovie) => Movie.create(newMovie);
+// Using relation to save the owner's ID in the Movie document
+const create = (newMovie, ownerId) => Movie.create({ ...newMovie, owner: ownerId });
 
 // .populate() is a model population - we get all the casts details (full model) via the stored IDs in the Movie model
 // casts.cast - the `cast` is nested in `casts`
