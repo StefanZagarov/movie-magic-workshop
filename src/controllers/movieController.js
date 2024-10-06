@@ -62,6 +62,10 @@ router.get(`/:movieId/details`, async (req, res) =>
     // Fixing the two equals
     const isOwner = req.user._id === movie.owner?.toString();
 
+    // If there is no user, it will return undefined, which will turn to false
+    // We call this in the details tempalte because when we call the template, it will render inside the main layout, in the main layout we will have the access to the data given from here
+
+
     // We need to turn to a service which will make the connection - relation
     // We can get the id of all the casts, and populate the data of each cast
 
@@ -148,7 +152,7 @@ router.post(`/:movieId/edit`, async (req, res) =>
 {
     const movieData = req.body;
     const movieId = req.params.movieId;
-    console.log(movieId);
+
     await movieService.edit(movieId, movieData);
 
     res.redirect(`/movies/${movieId}/details`);

@@ -33,10 +33,18 @@ export const authMiddleware = (req, res, next) =>
 
         // SET OBJECTS LIKE THIS INSTEAD
         // Since it checks and doesn't find `user` property on `res`
-        req.user = {
+        const user = {
             _id: decodedToken._id,
             email: decodedToken.email
         };
+
+        // Attach the whole data to the requests so the actions can see it
+        req.user = user;
+        // Attach parameters to the responses so the views can also see it
+        res.locals.userId = user._id;
+        res.locals.userEmail = user.email;
+        // Since we have reached this part, that means we are authenticated, it will return either true or undefined, which thanks to JS this means false
+        res.locals.isAuthenticated = true;
 
         // If its valid, continue
         return next();
