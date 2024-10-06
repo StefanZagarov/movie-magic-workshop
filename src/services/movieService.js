@@ -72,5 +72,8 @@ const attach = (movieId, castId, character) =>
     return Movie.findByIdAndUpdate(movieId, { $push: { casts: { cast: castId, character } } });
 };
 
+// Delete movie
+const remove = (movieId) => Movie.findByIdAndDelete(movieId);
+
 // This is called `Anonymus export`
-export default { getAll, getOne, create, attach };
+export default { getAll, getOne, create, attach, remove };
