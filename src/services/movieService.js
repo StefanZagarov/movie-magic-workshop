@@ -4,7 +4,7 @@ const getAll = (filter = {}) =>
 {
     // Since this returns a Query, we can stack over it before we `await` to get the document
     let moviesQuery = Movie.find();
-    console.log(filter);
+
     // The filters will work in steps: it will first filter by name, then by genre, and finally by year
     if (filter.title)
     {

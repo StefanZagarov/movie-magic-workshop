@@ -16,10 +16,10 @@
   resize: none;
 }
 
-input[type=number]::-webkit-inner-spin-button,
-input[type=number]::-webkit-outer-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button { 
+  -webkit-appearance: none; 
+  margin: 0; 
 }
 
 .createCastForm {
@@ -28,7 +28,7 @@ input[type=number]::-webkit-outer-spin-button {
   transition: 0.2s;
 }
 
-.createCastForm>h2 {
+.createCastForm > h2 {
   font-weight: bold;
   font-size: 27px;
   margin-bottom: 0.8em;
@@ -51,14 +51,14 @@ input[type=number]::-webkit-outer-spin-button {
 }
 
 .info-cast {
-  width: 250px;
-  background: #6D6875;
-  padding: 55px 5px;
-  border-right: 5px solid black;
+    width: 250px;
+    background: #6D6875;
+    padding: 55px 5px;
+    border-right: 5px solid black;
 }
 
 .info-cast>h2 {
-  padding-top: 10em;
-  font-weight: bold;
-  font-size: 23px;
+    padding-top: 10em;
+    font-weight: bold;
+    font-size: 23px;
 }

@@ -13,7 +13,8 @@ const getAll = () => Cast.find();
 
 const getAllWithout = (characters) =>
 {
-    // Since we have nested the casts ids, we need to first extract all of the `characters`, which contain the cast document with the id data
+    // We dont have ID for the outer document, it gives error because it wants an ID
+    // We need to get all nested documents in a loop
     const casts = characters.map(character => character.cast);
 
     const result = Cast.find().nin('_id', casts);
