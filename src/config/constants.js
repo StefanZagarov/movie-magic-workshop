@@ -1,0 +1,1 @@
+// Save constant data needed in multiple modules
