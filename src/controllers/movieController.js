@@ -132,4 +132,26 @@ router.get(`/:movieId/delete`, async (req, res) =>
     res.redirect(`/`);
 });
 
+// Edit movie page
+router.get(`/:movieId/edit`, async (req, res) =>
+{
+    const movieId = req.params.movieId;
+
+    // Get the movie's data
+    const movie = await movieService.getOne(movieId).lean();
+
+    res.render(`movies/edit`, { movie });
+});
+
+// Update the information in the DB
+router.post(`/:movieId/edit`, async (req, res) =>
+{
+    const movieData = req.body;
+    const movieId = req.params.movieId;
+    console.log(movieId);
+    await movieService.edit(movieId, movieData);
+
+    res.redirect(`/movies/${movieId}/details`);
+});
+
 export default router;
