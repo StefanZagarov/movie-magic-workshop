@@ -1,6 +1,6 @@
 import User from "../models/User.js";
 import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
+import jwt from "../lib/jwt.js";
 
 const register = (email, password) =>
 {
@@ -30,7 +30,7 @@ const login = async (email, password) =>
 
     // Finally generate the JWT - happy path
     const payload = { _id: user._id, email };
-    const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: "2h" });
+    const token = await jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: "2h" });
 
     return token;
 };

@@ -16,7 +16,13 @@ router.post(`/register`, async (req, res) =>
 
     await authService.register(email, password);
 
-    res.redirect(`/auth/login`);
+    // Automatic login
+    const token = await authService.login(email, password);
+    // Attach the token to the header
+    res.cookie(`auth`, token, { httpOnly: true });
+
+
+    res.redirect(`/`);
 });
 
 // Render the login page
