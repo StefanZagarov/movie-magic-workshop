@@ -2,9 +2,18 @@ import User from "../models/User.js";
 import bcrypt from "bcrypt";
 import jwt from "../lib/jwt.js";
 
-const register = (email, password) =>
+const register = async (email, password, rePassword) =>
 {
-    return User.create({ email, password });
+    // Check if user exists - countDocuments returns the number of times this email is found in the database
+    const userCount = await User.countDocuments({ email });
+
+    // If we have even one of this email, then naturally the user already exists
+    if (userCount > 0)
+    {
+        throw new Error(`User already exists!`);
+    }
+
+    return User.create({ email, password, rePassword });
 };
 
 const login = async (email, password) =>

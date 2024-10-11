@@ -24,7 +24,7 @@ router.get(`/create`, isAuth, (req, res) =>
 
 // We have a form that will try to POST on the same URL address, so we need a POST handler in order to handle the form submit
 // We want to proccess the field data
-router.post(`/create`, (req, res) =>
+router.post(`/create`, async (req, res) =>
 {
     // We want to get the data from the request's body (req.body property). But it will be undefined unless we add in app.js the middleware app.use(express.urlencoded());
     // First we get the data from the request body
@@ -33,8 +33,18 @@ router.post(`/create`, (req, res) =>
     // Add the user id to the movie's info so we can use it later to check if the movie is created by the logged in user
     const ownerId = req.user._id;
 
-    // Now we want to save the data to the data layer, however the controller can't directly access the data layer, so we have to use the service layer
-    movieService.create(movieData, ownerId);
+    // Catch errors
+    try
+    {
+        // Now we want to save the data to the data layer, however the controller can't directly access the data layer, so we have to use the service layer
+        await movieService.create(movieData, ownerId);
+    }
+    catch (error)
+    {
+        // Getting all errors - get and display the first error, if it exists
+        console.dir(Object.values(error.errors)[0]?.message);
+        return res.end();
+    }
 
     // Unable to load the css (ns error connection refused), even on lecturer's code, the problem comes from the browser most likely OR the static path is incorrect for the redirect
     res.redirect(`/`);

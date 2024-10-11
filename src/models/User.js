@@ -2,8 +2,30 @@ import { Schema, model } from "mongoose";
 import bcrypt from "bcrypt";
 
 const userSchema = new Schema({
-    email: String,
-    password: String
+    email: {
+        type: String,
+        // This adds an index to the email, effectively making it impossible to have two emails of the same type
+        unique: true,
+        // Minimal character length to be 10 - add custom error message
+        validate: [/@[A-Za-z0-9]+.[A-Za-z0-9]+$/, `Invalid email address!`],
+        minLength: [10, `Email is too short!`],
+    },
+    password: {
+        type: String,
+        validate: [/^[A-Za-z0-9]+$/, `Invalid password characters!`],
+        minLength: [6, `Password is too short!`]
+    }
+});
+
+// For demonstration only - creating virtual property for validating the re-password
+// This validation happens on creation - the three steps are: create > validate > save
+userSchema.virtual(`rePassword`).set(function (value) // Set the value of the virtual property
+{
+    // The value will be validated as it is set
+    if (value !== this.password)
+    {
+        throw new Error(`Passwords don't match!`);
+    }
 });
 
 // Constants are saved with this naming convention

@@ -1,5 +1,6 @@
 import { Router } from "express";
 import authService from "../services/authService.js";
+// import validator from "validator";
 
 const router = Router();
 
@@ -14,7 +15,29 @@ router.post(`/register`, async (req, res) =>
 {
     const { email, password, rePassword } = req.body;
 
-    await authService.register(email, password);
+    // Using validator to validate the email - checking defensively
+    // if (!validator.isEmail(email))
+    // {
+    //     return res.status(400).end();
+    // }
+
+    // Validate re-password - better option
+    // if (password !== password)
+    // {
+    //     console.log(`Passwords don't match!`);
+
+    //     return res.status(400).end();
+    // }
+
+    try
+    {
+        await authService.register(email, password, rePassword);
+    }
+    catch (error)
+    {
+        console.log(error.message);
+        return res.end();
+    }
 
     // Automatic login
     const token = await authService.login(email, password);

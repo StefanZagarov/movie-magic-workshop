@@ -16,7 +16,7 @@ router.get(`/`, async (req, res) =>
     // Get the movies from the DB
     const movies = await movieServices.getAll().lean();
 
-    // Handlebars doesn't know what a Document is, so we fix it by sending clean data
+    // Handlebars doesn't know what a Document is, so we fix it by sending clean data - using .lean()
     res.render(`home`, { movies });
 });
 
