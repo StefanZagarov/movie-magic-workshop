@@ -3,6 +3,8 @@
 import express from "express";
 import cookieParser from "cookie-parser";
 import { authMiddleware } from "../middlewares/authMiddleware.js";
+import session from "express-session";
+import { tempData } from "../middlewares/tempDataMiddleware.js";
 
 export default function expressInit(app)
 {
@@ -11,8 +13,13 @@ export default function expressInit(app)
 
     // In order to get the data from the `create.hbs` form, we need to be able to use req.body property. For that we need the `urlencoded` middleware (body-parser is deprecated so we need to add the option {extended: false})
     app.use(express.urlencoded({ extended: false }));
-
     app.use(cookieParser());
-
+    app.use(session({
+        secret: 'keyboard cat',
+        resave: false,
+        saveUninitialized: true,
+        cookie: { secure: false }
+    }));
     app.use(authMiddleware);
+    app.use(tempData);
 }

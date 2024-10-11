@@ -1,5 +1,6 @@
 import { Router } from "express";
 import authService from "../services/authService.js";
+import getErrorMessage from "../utils/errorUtil.js";
 // import validator from "validator";
 
 const router = Router();
@@ -35,8 +36,8 @@ router.post(`/register`, async (req, res) =>
     }
     catch (error)
     {
-        console.log(error.message);
-        return res.end();
+        // Use the new error message system
+        return res.render(`auth/register`, { error: getErrorMessage(error), email });
     }
 
     // Automatic login

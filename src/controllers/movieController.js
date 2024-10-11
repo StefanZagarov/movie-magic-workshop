@@ -5,6 +5,7 @@ import { Router } from "express";
 import movieService from "../services/movieService.js";
 import castService from "../services/castService.js";
 import { isAuth } from "../middlewares/authMiddleware.js";
+import getErrorMessage from "../utils/errorUtil.js";
 
 const router = Router();
 
@@ -42,8 +43,10 @@ router.post(`/create`, async (req, res) =>
     catch (error)
     {
         // Getting all errors - get and display the first error, if it exists
-        console.dir(Object.values(error.errors)[0]?.message);
-        return res.end();
+        // TODO: Find a way to display all errors at once
+        const errorMessage = getErrorMessage(error);
+        // Keep the already filled fields by sending the data aswell - in create.hbs we add value to each field which will be filled with the respectful data, if it exists in movieData
+        return res.render(`movies/create`, { error: errorMessage, movie: movieData });
     }
 
     // Unable to load the css (ns error connection refused), even on lecturer's code, the problem comes from the browser most likely OR the static path is incorrect for the redirect
@@ -142,6 +145,20 @@ router.post(`/:movieId/attach`, isAuth, async (req, res) =>
 router.get(`/:movieId/delete`, isAuth, async (req, res) =>
 {
     const movieId = req.params.movieId;
+
+    // Check if owner
+    // 1. Get the movie
+    const movie = await movieService.getOne(movieId);
+    // 2. Check if the owner's id doesn't match the current user's id
+    if (movie.owner.toString() !== req.user._id)
+    {
+        // Inadequate way
+        // return res.render(`movies/details`, { movie, isOwner: false, error: `You cannot delete this movie!` });
+
+        // Using tempData
+        res.setError(`You cannot delete this movie!`);
+        return res.redirect(`/movies/${movieId}/details`);
+    }
 
     await movieService.remove(movieId);
 

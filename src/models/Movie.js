@@ -56,8 +56,8 @@ const movieSchema = new Schema({
     },
     imageUrl: {
         type: String,
-        required: [true, `Image urk is required!`],
-        validate: [/[^https?:\/\/]/, `Invalid image URL!`]
+        required: [true, `Image url is required!`],
+        validate: [/^https?:\/\//, `Invalid image URL!`]
     },
 
     // Creating relational data: many-to-many
