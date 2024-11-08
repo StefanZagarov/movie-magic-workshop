@@ -16,7 +16,7 @@ import handlebarsInit from "./config/handlebarsInit.js";
 // Import the connection to the database
 import mongooseInit from "./config/mongooseInit.js";
 
-const port = 5000;
+const port = 3000;
 
 // Get the server
 const app = express();
@@ -32,4 +32,4 @@ mongooseInit();
 app.use(routes);
 
 // Add a listener
-app.listen(port, () => console.log(`Server is listening on http://localhost:5000...`));
+app.listen(port, () => console.log(`Server is listening on http://localhost:${port}...`));

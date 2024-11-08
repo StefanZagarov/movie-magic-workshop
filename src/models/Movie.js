@@ -52,7 +52,7 @@ const movieSchema = new Schema({
         type: String,
         required: [true, `Description is required!`],
         maxLength: [500, `Max description length is 500 characters!`],
-        validate: [/^[A-Za-z0-9 ]+$/, `Description can contain only alpha numeric characters!`]
+        validate: [/^[A-Za-z0-9 ,']+$/, `Description can contain only alpha numeric characters!`]
     },
     imageUrl: {
         type: String,
