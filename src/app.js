@@ -1,7 +1,5 @@
 // The main file from which the whole program starts
 
-// TODO: Create all error handlings cases (all awaits) and render error message for all possible cases (register, add cast, login, etc)
-
 import express from "express";
 // Import the routes.js for the modular routes
 import routes from "./routes.js";

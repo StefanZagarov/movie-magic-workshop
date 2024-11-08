@@ -1,18 +1,18 @@
 import { Router } from "express";
 import authService from "../services/authService.js";
 import getErrorMessage from "../utils/errorUtil.js";
-// import validator from "validator";
+import { isAuth, isGuest } from "../middlewares/authMiddleware.js";
 
 const router = Router();
 
 // Render the register page
-router.get(`/register`, (req, res) =>
+router.get(`/register`, isGuest, (req, res) =>
 {
-    res.render(`auth/register`);
+    res.render(`auth/register`, { title: `Register` });
 });
 
 // Handle the post request, hash the password
-router.post(`/register`, async (req, res) =>
+router.post(`/register`, isGuest, async (req, res) =>
 {
     const { email, password, rePassword } = req.body;
 
@@ -34,11 +34,14 @@ router.post(`/register`, async (req, res) =>
     {
         await authService.register(email, password, rePassword);
     }
+    // Unhappy path first:
     catch (error)
     {
         // Use the new error message system
-        return res.render(`auth/register`, { error: getErrorMessage(error), email });
+        return res.render(`auth/register`, { title: `Register`, error: getErrorMessage(error), email });
     }
+
+    // Happy path:
 
     // Automatic login
     const token = await authService.login(email, password);
@@ -50,25 +53,35 @@ router.post(`/register`, async (req, res) =>
 });
 
 // Render the login page
-router.get(`/login`, (req, res) =>
+router.get(`/login`, isGuest, (req, res) =>
 {
-    res.render(`auth/login`);
+    res.render(`auth/login`, { title: `Login` });
 });
 
 // Hanlde the login request
-router.post(`/login`, async (req, res) =>
+router.post(`/login`, isGuest, async (req, res) =>
 {
     const { email, password } = req.body;
 
-    const token = await authService.login(email, password);
+    try
+    {
+        const token = await authService.login(email, password);
 
-    // Add the token to the cookie so we can form the session of the user - the token is added to the Header, if something is added to the Header, then the Controller is responsible for handling it
-    res.cookie(`auth`, token, { httpOnly: true });
+        // Add the token to the cookie so we can form the session of the user - the token is added to the Header, if something is added to the Header, then the Controller is responsible for handling it
+        res.cookie(`auth`, token, { httpOnly: true });
 
-    res.redirect(`/`);
+        res.redirect(`/`);
+    }
+    catch (error)
+    {
+        const errorMessage = getErrorMessage(error);
+
+        res.render(`auth/login`, { title: `Login`, email, error: errorMessage });
+    }
+
 });
 
-router.get(`/logout`, (req, res) =>
+router.get(`/logout`, isAuth, (req, res) =>
 {
     res.clearCookie(`auth`);
 

@@ -17,13 +17,13 @@ router.get(`/`, async (req, res) =>
     const movies = await movieServices.getAll().lean();
 
     // Handlebars doesn't know what a Document is, so we fix it by sending clean data - using .lean()
-    res.render(`home`, { movies });
+    res.render(`home`, { title: `Movie Magic`, movies });
 });
 
 // The about page makes sense to be in the home controller because it is a static page
 router.get(`/about`, (req, res) =>
 {
-    res.render(`home/about`);
+    res.render(`home/about`, { title: `About` });
 });
 
 // Finally, export it

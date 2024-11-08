@@ -8,7 +8,7 @@ import castService from "../services/castService.js";
 const router = Router();
 
 // 3. Add address request handle
-router.get(`/create`, (req, res) => { res.render(`cast/create`); });
+router.get(`/create`, (req, res) => { res.render(`cast/create`, { title: `Create Cast` }); });
 
 router.post(`/create`, (req, res) =>
 {

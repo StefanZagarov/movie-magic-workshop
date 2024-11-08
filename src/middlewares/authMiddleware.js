@@ -71,3 +71,12 @@ export const isAuth = function (req, res, next)
 
     return next();
 };
+
+// Route guard - if the client is a user, he has no access to guest functionality
+export function isGuest(req, res, next)
+{
+    if (req.user) return res.redirect(`/404`);
+
+    // If the client is a guest, continue
+    next();
+}

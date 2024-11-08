@@ -9,7 +9,7 @@ import getErrorMessage from "../utils/errorUtil.js";
 
 const router = Router();
 
-// Deprecated (we don't use it anymore since we use .lean())
+// Deprecated (we don't use it anymore since we use .lean()), this is for demonstration only for how `lean` works
 function toArray(documents)
 {
     return documents.map(document => document.toObject());
@@ -20,12 +20,12 @@ function toArray(documents)
 router.get(`/create`, isAuth, (req, res) =>
 {
     // The path we give will be searched in `views`
-    res.render(`movies/create`);
+    res.render(`movies/create`, { title: `Create Movie` });
 });
 
 // We have a form that will try to POST on the same URL address, so we need a POST handler in order to handle the form submit
 // We want to proccess the field data
-router.post(`/create`, async (req, res) =>
+router.post(`/create`, isAuth, async (req, res) =>
 {
     // We want to get the data from the request's body (req.body property). But it will be undefined unless we add in app.js the middleware app.use(express.urlencoded());
     // First we get the data from the request body
@@ -43,10 +43,9 @@ router.post(`/create`, async (req, res) =>
     catch (error)
     {
         // Getting all errors - get and display the first error, if it exists
-        // TODO: Find a way to display all errors at once
         const errorMessage = getErrorMessage(error);
         // Keep the already filled fields by sending the data aswell - in create.hbs we add value to each field which will be filled with the respectful data, if it exists in movieData
-        return res.render(`movies/create`, { error: errorMessage, movie: movieData });
+        return res.render(`movies/create`, { title: `Create Movie`, error: errorMessage, movie: movieData });
     }
 
     // Unable to load the css (ns error connection refused), even on lecturer's code, the problem comes from the browser most likely OR the static path is incorrect for the redirect
@@ -85,7 +84,7 @@ router.get(`/:movieId/details`, async (req, res) =>
     // We can get the id of all the casts, and populate the data of each cast
 
     // Send the movie to the template
-    res.render(`movies/details`, { movie, isOwner });
+    res.render(`movies/details`, { title: `Details`, movie, isOwner });
 });
 
 // The rating has been removed for an express "helper" - check "handlebarsInit.js" > helper:
@@ -116,7 +115,7 @@ router.get(`/search`, async (req, res) =>
     const movies = await movieService.getAll(filter).lean(); // Convert to clean objects
 
     // In order to keep the text in the search fields after we have submitted the form, we also give the filter object to the template
-    res.render(`home`, { isSearch: true, movies, filter });
+    res.render(`home`, { title: `Search`, isSearch: true, movies, filter });
 });
 
 // Adding the attach button functionality - alternative way to implement is by using "nested route"
@@ -126,7 +125,7 @@ router.get(`/:movieId/attach`, isAuth, async (req, res) =>
     // Getting all casts to send to the attach.hbs, we get all casts that are not already added
     const casts = await castService.getAllWithout(movie.casts).lean();
 
-    res.render(`cast/attach`, { movie, casts });
+    res.render(`cast/attach`, { title: `Attach Cast`, movie, casts });
 });
 
 // Create an action for sending the data of attach cast
@@ -173,7 +172,7 @@ router.get(`/:movieId/edit`, isAuth, async (req, res) =>
     // Get the movie's data
     const movie = await movieService.getOne(movieId).lean();
 
-    res.render(`movies/edit`, { movie });
+    res.render(`movies/edit`, { title: `Edit Movie`, movie });
 });
 
 // Update the information in the DB
